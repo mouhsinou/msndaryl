@@ -1,47 +1,39 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue';
 import TheWelcome from './components/TheWelcome.vue'
+import login from './components/Login.vue'
+import signup from './components/signup.vue'
+
+const isLoggedIn = ref(false);
+
+const toggleLogin = () => {
+  isLoggedIn.value = !isLoggedIn.value;
+};
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div id="app">
+      <TheWelcome />
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.navbar-brand {
+  font-weight: bold;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.btn {
+  transition: all 0.3s ease;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.btn:hover {
+  transform: translateY(-2px);
 }
 </style>

@@ -1,88 +1,105 @@
-<script setup>
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
+<template>
+  <div class="vh-100 vw-100 d-flex flex-column bg-gradient">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div class="container">
+        <a class="navbar-brand text-primary" href="#">
+          <i class="bi bi-shop me-2"></i>RECHERCHE ANNONCES
+        </a>
+        <div>
+          <router-link to="/login" class="btn btn-outline-primary me-2">
+            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+          </router-link>
+          <router-link to="/signup" class="btn btn-outline-secondary">
+            <i class="bi bi-person-plus me-1"></i>Sign Up
+          </router-link>
+        </div>
+      </div>
+    </nav>
+    
+    <main class="flex-grow-1 d-flex flex-column justify-content-center align-items-center px-4 text-center">
+      <h1 class="display-4 fw-bold text-primary mb-3">Trouvez vos produits locaux</h1>
+      <p class="lead text-muted mb-5">Cherchez des produits et services dans votre région</p>
+      
+      <div class="w-100" style="max-width: 800px;">
+        <div class="input-group mb-3">
+          <span class="input-group-text bg-white">
+            <i class="bi bi-geo-alt text-primary"></i>
+          </span>
+          <input type="text" class="form-control" placeholder="Votre localité" aria-label="Location">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Que recherchez-vous ?" 
+            aria-label="Search" 
+            v-model="searchQuery"
+          >
+          <button 
+            class="btn btn-primary" 
+            type="button" 
+            @click="performSearch"
+          >
+            <i class="bi bi-search me-1"></i>Rechercher
+          </button>
+        </div>
+      </div>
+      
+      <div class="container mt-5">
+        <div class="row g-4">
+          <div v-for="category in ['Électronique', 'Vêtements', 'Meubles']" :key="category" class="col-md-4">
+            <div class="card h-100 shadow-sm hover-shadow">
+              <div class="card-body">
+                <h5 class="card-title text-primary">{{ category }}</h5>
+                <p class="card-text">Trouvez les meilleures offres en {{ category.toLowerCase() }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="bg-dark text-white py-3 text-center">
+      <p class="mb-0">&copy; 2024 RECHERCHE ANNONCES. Tous droits réservés.</p>
+    </footer>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Home',
+  data() {
+    return {
+      searchQuery: ''
+    }
+  },
+  methods: {
+    performSearch() {
+      console.log('Searching for:', this.searchQuery);
+    }
+  }
+};
 </script>
 
-<template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
+<style scoped>
+.bg-gradient {
+  background: linear-gradient(135deg, #e6f2ff 0%, #d9e6f2 100%);
+}
 
-    Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a>
-    provides you with all information you need to get started.
-  </WelcomeItem>
+.hover-shadow:hover {
+  transition: box-shadow 0.3s ease-in-out;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
 
-  <WelcomeItem>
-    <template #icon>
-      <ToolingIcon />
-    </template>
-    <template #heading>Tooling</template>
+.form-control:focus, .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
 
-    This project is served and bundled with
-    <a href="https://vitejs.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The
-    recommended IDE setup is
-    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a> +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank" rel="noopener">Volar</a>. If
-    you need to test your components and web pages, check out
-    <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a> and
-    <a href="https://on.cypress.io/component" target="_blank" rel="noopener"
-      >Cypress Component Testing</a
-    >.
+/* Ajustements pour assurer une hauteur complète */
+html, body {
+  height: 100%;
+  margin: 0;
+}
 
-    <br />
-
-    More instructions are available in <code>README.md</code>.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <EcosystemIcon />
-    </template>
-    <template #heading>Ecosystem</template>
-
-    Get official tools and libraries for your project:
-    <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
-    <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If
-    you need more resources, we suggest paying
-    <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a>
-    a visit.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Community</template>
-
-    Got stuck? Ask your question on
-    <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>, our official
-    Discord server, or
-    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
-      >StackOverflow</a
-    >. You should also subscribe to
-    <a href="https://news.vuejs.org" target="_blank" rel="noopener">our mailing list</a> and follow
-    the official
-    <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
-    twitter account for latest news in the Vue world.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
-    </template>
-    <template #heading>Support Vue</template>
-
-    As an independent project, Vue relies on community backing for its sustainability. You can help
-    us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
-  </WelcomeItem>
-</template>
+#app {
+  height: 100%;
+}
+</style>
