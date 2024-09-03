@@ -65,17 +65,34 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'TheWelcome',
   data() {
     return {
-      searchQuery: ''
-    }
+      searchQuery: '',
+      searchLocation: '',
+      products: [],
+    };
   },
   methods: {
-    performSearch() {
-      console.log('Searching for:', this.searchQuery);
-    }
-  }
+    async performSearch() {
+      try {
+        const response = await fetch('http://localhost:3001/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            location: this.searchLocation,
+            name: this.searchQuery,
+          }),
+        });
+        const data = await response.json();
+        this.products = data;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    },
+  },
 };
 </script>
 

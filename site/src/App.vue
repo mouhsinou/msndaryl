@@ -1,20 +1,11 @@
 <script setup>
 import { ref } from 'vue';
-import TheWelcome from './components/TheWelcome.vue'
-import login from './components/Login.vue'
-import signup from './components/signup.vue'
-
-const isLoggedIn = ref(false);
-
-const toggleLogin = () => {
-  isLoggedIn.value = !isLoggedIn.value;
-};
 </script>
 
 <template>
   <div id="app">
-      <TheWelcome />
-    </div>
+    <router-view /> <!-- Ceci affichera le composant en fonction de la route -->
+  </div>
 </template>
 
 <style>

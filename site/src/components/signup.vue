@@ -1,87 +1,72 @@
 <template>
-  <div class="item">
-    <i>
-      <slot name="icon"></slot>
-    </i>
-    <div class="details">
-      <h3>
-        <slot name="heading"></slot>
-      </h3>
-      <slot></slot>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-4">Inscription</h2>
+            <form @submit.prevent="signup">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" v-model="email" required>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="password" v-model="password" required>
+              </div>
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+                <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+              </div>
+            </form>
+            <p class="text-center mt-3">
+              Déjà un compte ? 
+              <router-link to="/login">Se connecter</router-link>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.item {
-  margin-top: 2rem;
-  display: flex;
-  position: relative;
-}
+<script>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+//import { auth } from '../../server/mongodb';
 
-.details {
-  flex: 1;
-  margin-left: 1rem;
-}
+export default {
+  name: 'Signup',
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const confirmPassword = ref('');
+    const router = useRouter();
 
-i {
-  display: flex;
-  place-items: center;
-  place-content: center;
-  width: 32px;
-  height: 32px;
+    const signup = async () => {
+      if (password.value !== confirmPassword.value) {
+        alert("Les mots de passe ne correspondent pas");
+        return;
+      }
+      try {
+        await createUserWithEmailAndPassword(auth, email.value, password.value);
+        router.push('/');
+      } catch (error) {
+        console.error("Erreur d'inscription", error);
+        alert("Erreur d'inscription: " + error.message);
+      }
+    };
 
-  color: var(--color-text);
-}
-
-h3 {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 0.4rem;
-  color: var(--color-heading);
-}
-
-@media (min-width: 1024px) {
-  .item {
-    margin-top: 0;
-    padding: 0.4rem 0 1rem calc(var(--section-gap) / 2);
+    return {
+      email,
+      password,
+      confirmPassword,
+      signup
+    };
   }
-
-  i {
-    top: calc(50% - 25px);
-    left: -26px;
-    position: absolute;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    border-radius: 8px;
-    width: 50px;
-    height: 50px;
-  }
-
-  .item:before {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    bottom: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
-
-  .item:after {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    top: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
-
-  .item:first-of-type:before {
-    display: none;
-  }
-
-  .item:last-of-type:after {
-    display: none;
-  }
-}
-</style>
+};
+</script>
