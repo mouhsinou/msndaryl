@@ -32,8 +32,6 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-//import { auth } from '../../server/mongodb';
 
 export default {
   name: 'Login',
@@ -44,19 +42,40 @@ export default {
 
     const login = async () => {
       try {
-        await signInWithEmailAndPassword(auth, email.value, password.value);
-        router.push('/');
+        // Requête POST vers le backend Express pour la connexion
+        const response = await fetch('http://localhost:5000/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('Connexion réussie !');
+          // Stocker le token JWT dans le localStorage pour les requêtes futures
+          localStorage.setItem('token', data.token);
+          // Rediriger vers la page d'accueil ou une autre page
+          router.push('/');
+        } else {
+          alert('Erreur de connexion : ' + data.message);
+        }
       } catch (error) {
-        console.error("Erreur de connexion", error);
-        alert("Erreur de connexion: " + error.message);
+        console.error('Erreur lors de la requête de connexion', error);
+        alert('Erreur de connexion: ' + error.message);
       }
     };
 
     return {
       email,
       password,
-      login
+      login,
     };
-  }
+  },
 };
 </script>

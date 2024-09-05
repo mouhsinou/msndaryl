@@ -7,23 +7,43 @@
             <h2 class="card-title text-center mb-4">Inscription</h2>
             <form @submit.prevent="signup">
               <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  v-model="name"
+                  required
+                />
+              </div>
+              <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" v-model="email" required>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  v-model="email"
+                  required
+                />
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" id="password" v-model="password" required>
-              </div>
-              <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
-                <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  v-model="password"
+                  required
+                />
               </div>
               <div class="d-grid">
-                <button type="submit" class="btn btn-primary">S'inscrire</button>
+                <button type="submit" class="btn btn-primary">
+                  S'inscrire
+                </button>
               </div>
             </form>
             <p class="text-center mt-3">
-              Déjà un compte ? 
+              Déjà un compte ?
               <router-link to="/login">Se connecter</router-link>
             </p>
           </div>
@@ -34,39 +54,37 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-//import { auth } from '../../server/mongodb';
+import axios from "axios";
 
 export default {
-  name: 'Signup',
-  setup() {
-    const email = ref('');
-    const password = ref('');
-    const confirmPassword = ref('');
-    const router = useRouter();
-
-    const signup = async () => {
-      if (password.value !== confirmPassword.value) {
-        alert("Les mots de passe ne correspondent pas");
-        return;
-      }
-      try {
-        await createUserWithEmailAndPassword(auth, email.value, password.value);
-        router.push('/');
-      } catch (error) {
-        console.error("Erreur d'inscription", error);
-        alert("Erreur d'inscription: " + error.message);
-      }
-    };
-
+  data() {
     return {
-      email,
-      password,
-      confirmPassword,
-      signup
+      name: "",
+      email: "",
+      password: "",
     };
-  }
+  },
+  methods: {
+    async signup() {
+      
+        axios
+          .post("http://localhost:5000/api/users/register", {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            role: "user", // ou tout autre rôle par défaut
+          })
+          .then((resp) => {
+        this.$router.push('/dashboard'); 
+      
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        //alert(response.data.message);
+        // Rediriger ou faire d'autres actions après la réussite de l'inscription
+    
+    },
+  },
 };
 </script>
