@@ -6,9 +6,8 @@ import Dashboard from './components/dashboard.vue';
 
 
 
-Vue.use(Router);
 
-routes: [
+const routes = [
   { path: '/',  component: TheWelcome },
   { path: '/login', name: 'Login', component: Login },
   { path: '/signup', name: 'Signup', component: Signup },
@@ -18,7 +17,14 @@ routes: [
     component: Dashboard,
     meta: { requiresAuth: true }, // Cette route nécessite une authentification
   },
-],
+]
+
+
+const router = createRouter({
+  history: createWebHistory(),  // Use HTML5 history mode
+  routes,  // Short for `routes: routes`
+});
+
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem('token'); // Vérifie l'existence du token dans localStorage
 
@@ -28,4 +34,5 @@ router.beforeEach((to, from, next) => {
     next(); // Permet l'accès à la route
   }
 });
+
 export default router;

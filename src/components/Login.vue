@@ -61,7 +61,7 @@ export default {
           // Stocker le token JWT dans le localStorage pour les requêtes futures
           localStorage.setItem('token', data.token);
           // Rediriger vers la page d'accueil ou une autre page
-          router.push('/');
+          router.push('/dashboard');
         } else {
           alert('Erreur de connexion : ' + data.message);
         }
